@@ -3,7 +3,7 @@
     {
       "id": 1,
       "title": "Messi is the goat ",
-      "completed": false
+      "completed": true
     },
     {
       "id": 2,
@@ -22,7 +22,7 @@
     },
     {
       "title": "learn react",
-      "completed": false,
+      "completed": true,
       "id": 6
     }
   ]

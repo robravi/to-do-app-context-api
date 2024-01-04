@@ -26,7 +26,7 @@ const Task = ({ task }) => {
   };
 
   return (
-    <div className="mb-1 gap-x-2 p-2 brightness-150  backdrop-blur-sm text-black text-sm font-bold border-current border-solid border-red shadow-2xl shadow-zinc-900  capitalize rounded-md">
+    <div className="mb-1 gap-x-2 p-2 brightness-150  backdrop-blur-sm  flex justify-start  text-black text-sm font-bold border-current border-solid border-red shadow-2xl shadow-zinc-900  capitalize rounded-md">
       <input
         type="checkbox"
         checked={task.completed}
@@ -35,7 +35,7 @@ const Task = ({ task }) => {
       />
 
       {isEditing ? (
-        <>
+        <div>
           <input
             type="text"
             value={editedText}
@@ -54,27 +54,31 @@ const Task = ({ task }) => {
           >
             Cancel
           </button>
-        </>
+        </div>
       ) : (
-        <>
-          <span className={task.completed ? "line-through" : ""}>
-            {task.title}
-          </span>{" "}
-          <button
-            onClick={handleEdit}
-            className=" ml-2 px-4 bg-yellow-500 rounded-md py-2"
-          >
-            Edit
-          </button>
-          <button
-            onClick={handleDelete}
-            className="bg-red-500 rounded-md  py-2 px-2 ml-1"
-          >
-            Delete
-          </button>
-          <br></br>
-          <span>{task.dateTime}</span>
-        </>
+        <div className="flex  ">
+          <div className="flex w-96 align-center ">
+            <span className={task.completed ? "line-through" : ""}>
+              {task.title}
+              <br />
+              {task.dateTime}
+            </span>
+          </div>
+          <div className="flex items-center">
+            <button
+              onClick={handleEdit}
+              className="  px-4 bg-yellow-500   rounded-md py-2"
+            >
+              Edit
+            </button>
+            <button
+              onClick={handleDelete}
+              className="bg-red-500 rounded-md   py-2 px-2 ml-1"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -84,7 +88,7 @@ Task.propTypes = {
   task: propTypes.shape({
     id: propTypes.number.isRequired,
     title: propTypes.string.isRequired,
-    completed: propTypes.bool.isRequired,
+    completed: propTypes.bool,
     dateTime: propTypes.string.isRequired,
   }).isRequired,
 };

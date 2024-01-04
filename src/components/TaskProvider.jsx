@@ -5,20 +5,25 @@ import axios from "axios";
 
 const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
+  const [filter, setFilter] = useState("all");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     try {
-      const fetchData = async () => {
-        const response = await axios.get("http://localhost:3001/todos");
-        const formattedTasks = response.data.map((task) => ({
-          id: task.id,
-          title: task.title,
-          completed: task.completed,
-          dateTime: new Date().toLocaleString(),
-        }));
-        setTasks(formattedTasks);
-      };
-      fetchData();
+      setTimeout(() => {
+        const fetchData = async () => {
+          const response = await axios.get("http://localhost:3001/todos");
+          const formattedTasks = response.data.map((task) => ({
+            id: task.id,
+            title: task.title,
+            completed: task.completed,
+            dateTime: new Date().toLocaleString(),
+          }));
+          setTasks(formattedTasks);
+        };
+        fetchData();
+        setLoading(false);
+      }, 1000);
     } catch (error) {
       console.log("error fteching Data", error);
     }
@@ -28,7 +33,7 @@ const TaskProvider = ({ children }) => {
     try {
       const response = await axios.post("http://localhost:3001/todos", {
         title: task.title,
-        // completed: false,
+        completed: false,
       });
       setTasks([
         ...tasks,
@@ -57,27 +62,43 @@ const TaskProvider = ({ children }) => {
       task.id === id ? { ...task, completed: !task.completed } : task
     );
     setTasks(upDatedTasks);
+    await axios.patch(`http://localhost:3001/todos/${id}`, {
+      completed: !tasks.completed,
+    });
   };
 
   const editTask = async (id, newText) => {
     try {
+      await axios.patch(`http://localhost:3001/todos/${id}`, {
+        title: newText,
+      });
       const upDatedTasks = tasks.map((task) =>
         task.id === id ? { ...task, title: newText } : task
       );
       setTasks(upDatedTasks);
-      await axios.patch(`http://localhost:3001/todos/${id}`, {
-        title: newText,
-      });
     } catch (error) {
       console.log("Error Editing Task", error);
-    } finally {
-      console.log("error detected");
     }
+  };
+  const filteredTask = () => {
+    if (filter === "completed") {
+      return tasks.filter((task) => task.completed);
+    } else if (filter === "incomplete") {
+      return tasks.filter((task) => !task.completed);
+    } else return tasks;
   };
 
   return (
     <TaskContext.Provider
-      value={{ tasks, addTask, deleteTask, toggleTask, editTask }}
+      value={{
+        tasks: filteredTask(),
+        addTask,
+        deleteTask,
+        toggleTask,
+        editTask,
+        setFilter,
+        loading,
+      }}
     >
       {children}
     </TaskContext.Provider>
