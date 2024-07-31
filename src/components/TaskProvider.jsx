@@ -23,7 +23,7 @@ const TaskProvider = ({ children }) => {
         };
         fetchData();
         setLoading(false);
-      }, 1000);
+      }, 2000);
     } catch (error) {
       console.log("error fteching Data", error);
     }

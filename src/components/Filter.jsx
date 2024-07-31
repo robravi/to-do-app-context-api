@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import TaskContext from "./TaskContext";
 
-const Filter = ({ filter }) => {
+const Filter = () => {
   const { setFilter } = useContext(TaskContext);
 
   const selectHandler = (e) => {
